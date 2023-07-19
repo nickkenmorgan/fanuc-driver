@@ -2,7 +2,7 @@ namespace l99.driver.fanuc;
 
 public partial class Platform
 {
-    public async Task<dynamic> RdMacroAsync(string id, short number = 1, short length = 10, int size = 1)
+    public async Task<dynamic> RdMacroAsync(string id, short number = 1, short length = 10, int size= 1)
     {
         return await Task.FromResult(RdMacro(id, number, length, size));
     }
