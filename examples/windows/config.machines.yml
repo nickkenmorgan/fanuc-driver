@@ -121,6 +121,7 @@ machines:
       - l99.driver.fanuc.collectors.GCodeData, fanuc
       - l99.driver.fanuc.collectors.AxisData, fanuc
       - l99.driver.fanuc.collectors.SpindleData, fanuc
+      - l99.driver.fanuc.collectors.Macro, fanuc
     ##
     ## handler instance attributes
     ##
@@ -199,6 +200,26 @@ machines:
             time_per_program: "^\\( *(?<key>TIME/PROGRAM) *: *(?<value>[^\\):\\n]+[^ \\):\\n])* *\\)$"
             kits_per_program: "^\\( *(?<key>KITS/PROGRAM) *: *(?<value>[^\\):\\n]+[^ \\):\\n])* *\\)$"
             comments: "^\\( *(?<key>COMMENTS) *: *(?<value>[^\\):\\n]+[^ \\):\\n])* *\\)$"
+    l99.driver.fanuc.collectors.Macro, fanuc:
+    - id: remaining_bar_length
+      level: path
+      number: !!int 730
+    - id: new_bar_length
+      level: path
+      number: !!int 731
+    - id: path_length
+      level: path
+      number: !!int 720
+    - id: faceoff_length
+      level: path
+      number: !!int 723
+    - id: ejector_length
+      level: path
+      number: !!int 718
+
+
+
+
 
   ##
   ## mtconnect example

@@ -1,5 +1,5 @@
 ﻿using l99.driver.fanuc.strategies;
-
+using System.Linq;
 // ReSharper disable once CheckNamespace
 namespace l99.driver.fanuc.collectors;
 
@@ -13,13 +13,51 @@ public class FanucMultiStrategyCollector
     protected FanucMultiStrategyCollector(FanucMultiStrategy strategy, dynamic configuration)
     {
         Logger = LogManager.GetLogger(GetType().FullName);
+
         Strategy = strategy;
         Configuration = configuration;
 
+  
         if (Configuration == null) Configuration = new Dictionary<object, object>();
-        if (!Configuration.ContainsKey("enabled")) Configuration.Add("enabled", true);
-        Enabled = Configuration["enabled"];
-    }
+        /*
+        //check if we are using the Macro class, if we are convert from list to Dictionary
+        string str = Logger.Name.Substring(Logger.Name.Length - 5);
+        if (str == "Macro")
+        {
+            var temp = new List<object>(Configuration);
+            Configuration = new Dictionary<object, object>();
+            for (var i = 0; i < temp.Count; i++)
+            {
+                Configuration.Add(i, temp[i]);
+            }
+        }
+
+        */
+        //check if we are using the Macro class, if we are convert from list to Dictionary
+        string str = Logger.Name.Substring(Logger.Name.Length - 5);
+        if (str == "Macro")
+        {
+            if (!Configuration[Configuration.Count - 1].ContainsKey("enabled")) {
+                Dictionary<object, object> keyValue = new Dictionary<object, object>
+                {
+                    { "enabled", true }
+                };
+
+                Configuration.Add(keyValue);
+            }
+           
+            Enabled = Configuration[Configuration.Count - 1]["enabled"];
+        }
+
+        else
+        {
+            if (!Configuration.ContainsKey("enabled")) Configuration.Add("enabled", true);
+            {
+
+            }
+            Enabled = Configuration["enabled"];
+        }
+        }
 
     public virtual async Task InitRootAsync()
     {
