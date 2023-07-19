@@ -122,6 +122,7 @@ machines:
       - l99.driver.fanuc.collectors.AxisData, fanuc
       - l99.driver.fanuc.collectors.SpindleData, fanuc
       - l99.driver.fanuc.collectors.Macro, fanuc
+      - l99.driver.fanuc.collectors.Pmc, fanuc
     ##
     ## handler instance attributes
     ##
@@ -216,6 +217,11 @@ machines:
     - id: ejector_length
       level: path
       number: !!int 718
+
+    l99.driver.fanuc.collectors.Pmc, fanuc:
+      id: run_status_running_tracking
+      address: D4933.0
+      type: bit
 
 
 
