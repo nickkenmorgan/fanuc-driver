@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "fanuc": {
+      "commandName": "Project",
+      "commandLineArgs": "--nlog\r\n../../../../examples/windows/nlog.config\r\n--config\r\n../../../../examples/windows/config.system.yml,../../../../examples/windows/config.user.yml,../../../../examples/windows/config.machines.yml",
+      "workingDirectory": "C:\\Users\\Mr. IIOT\\Desktop\\fanuc\\fanuc-driver\\fanuc\\bin\\Debug 32bit\\net7.0"
+    }
+  }
+}
