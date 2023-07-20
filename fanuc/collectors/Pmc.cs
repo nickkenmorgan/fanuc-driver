@@ -35,6 +35,7 @@ public class Pmc : FanucMultiStrategyCollector
                 ushort e_number = 0;
                 ushort length = 0;
                 int IODBPMC_type = 0;
+                int bit = -1;
 
                 if (type == "bit")
                 {
@@ -43,6 +44,7 @@ public class Pmc : FanucMultiStrategyCollector
                     length = (ushort)(18);
                     s_number = 4933;
                     e_number = 4934;
+                    bit = addr[addr.Length - 1] - '0';
                 }
                 else if (type == "byte")
                 {
@@ -51,6 +53,7 @@ public class Pmc : FanucMultiStrategyCollector
                     length = (ushort)(18);
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number + 1);
+                    bit = 6;
                 }
                 else if (type == "word")
                 {
@@ -59,6 +62,8 @@ public class Pmc : FanucMultiStrategyCollector
                     length = (ushort)(18);
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number + 1);
+                    IODBPMC_type = 1;
+                    bit = 7;
                 }
                 else if (type == "long")
                 {
@@ -67,6 +72,8 @@ public class Pmc : FanucMultiStrategyCollector
                     length = (ushort)(18);
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number + 1);
+                    IODBPMC_type = 2;
+                    bit = 8;
                 }
                 else if (type == "float32")
                 {
@@ -77,11 +84,11 @@ public class Pmc : FanucMultiStrategyCollector
                     e_number = (ushort)(s_number + 1);
                 }
 
-
+                
                 await Strategy.Peel("pmc",
                 new[]
                     {
-                await Strategy.SetNativeKeyed(id, await Strategy.Platform.RdPmcRngAsync(adr_type, data_type, s_number, e_number, length, IODBPMC_type)),
+                await Strategy.SetNativeKeyed(id, await Strategy.Platform.RdPmcRngAsync(adr_type, data_type, s_number, e_number, length, IODBPMC_type, bit)),
                     },
                     new dynamic[]
                     {

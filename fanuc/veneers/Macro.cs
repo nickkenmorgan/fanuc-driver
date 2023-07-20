@@ -26,8 +26,8 @@ public class Macro : Veneer
             state.mcr_val = mcr_val;
 
             Dictionary<dynamic, dynamic> dict = new Dictionary<dynamic, dynamic>();
-            dict.Add(id, state);
-
+           // dict.Add(id, state);
+           dict.Add(id, nativeInputs[0]);
             dynamic currentValue = new ExpandoObject();
             // convert state list to dictionary
             currentValue.Macro = dict;

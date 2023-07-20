@@ -2,12 +2,12 @@ namespace l99.driver.fanuc;
 
 public partial class Platform
 {
-    public async Task<dynamic> RdMacroAsync(string id, short number = 1, short length = 10, int size= 1)
+    public async Task<dynamic> RdMacroAsync(string id, short number = 1, short length = 10)
     {
-        return await Task.FromResult(RdMacro(id, number, length, size));
+        return await Task.FromResult(RdMacro(id, number, length));
     }
 
-    public dynamic RdMacro(string id, short number = 1 , short length = 10, int size = 1)
+    public dynamic RdMacro(string id, short number = 1 , short length = 10)
     {
         var macro = new Focas.ODBM();
 
@@ -25,7 +25,7 @@ public partial class Platform
             success = ndr.RC == Focas.EW_OK,
             rc = ndr.RC,
             request = new {cnd_rdmacro = new {number, length}},
-            response = new {cnd_rdmacro = new {macro}, id, size}
+            response = new {cnd_rdmacro = new {macro}, id,}
         };
 
         _logger.Trace($"[{_machine.Id}] Platform invocation result:\n{JObject.FromObject(nr)}");

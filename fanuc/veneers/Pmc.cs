@@ -17,8 +17,37 @@ public class Pmc : Veneer
         {
 
            var buff = nativeInputs[0];
-
+            var bit = nativeInputs[0].request.pmc_rdpmcrng.bit;
             dynamic currentValue = new ExpandoObject();
+
+            //looking for bits
+            if (bit <= 5 && bit >= 0)
+            {
+                currentValue.type = "Bit";
+                currentValue.cdata = nativeInputs[0].response.pmc_rdpmcrng.buf.cdata[bit];
+            }
+            else if (bit == 6)
+            {
+                currentValue.type = "Byte";
+                currentValue.cdata = nativeInputs[0].response.pmc_rdpmcrng.buf.cdata;
+            }
+            else if (bit == 7)
+            {
+                currentValue.type = "Word";
+                currentValue.cdata = nativeInputs[0].response.pmc_rdpmcrng.buf.idata;
+            }
+            else if (bit == 8)
+            {
+                currentValue.type = "Long";
+                currentValue.cdata = nativeInputs[0].response.pmc_rdpmcrng.buf.ldata;
+            }
+            else
+            {
+                currentValue.type = "32 Float";
+                currentValue.cdata = nativeInputs[0].response.pmc_rdpmcrng.buf.cdata;
+            }
+            //   var buff = nativeInputs[0];
+
             // convert state list to dictionary
             currentValue.Buffer = buff;
 

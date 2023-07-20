@@ -234,9 +234,9 @@ machines:
     - id: run_status_faulted
       address: D4933.4
       type: bit
-    - id: run_status_starved
-      address: D4933.5
-      type: bit
+#    - id: run_status_starved
+#      address: D4933.5
+#      type: bit
     - id: run_status_byte
       address: D4933
       type: byte
@@ -258,12 +258,12 @@ machines:
     - id: target_cycle_time
       address: D4854
       type: float32
-    - id: path1_start_lamp
-      address: F0000.5
-      type: bit
-    - id: path2_start_lamp
-      address: F1000.5
-      type: bit
+ #   - id: path1_start_lamp
+ #     address: F0000.5
+ #     type: bit
+ #   - id: path2_start_lamp
+ #     address: F1000.5
+ #     type: bit
 
 
 
