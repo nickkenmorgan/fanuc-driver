@@ -122,6 +122,14 @@ public class Pmc : FanucMultiStrategyCollector
                 return 8;
             case 'D':
                 return 9;
+            case 'M':
+                return 10;
+            case 'N':
+                return 11;
+            case 'E':
+                return 11;
+            case 'Z':
+                return 12;
             default:
                 return 0;
         }
