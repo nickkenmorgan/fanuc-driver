@@ -15,10 +15,14 @@ public class Pmc : Veneer
     {
         if (nativeInputs.All(o => o.success == true))
         {
+            
 
            var buff = nativeInputs[0];
             var bit = nativeInputs[0].request.pmc_rdpmcrng.bit;
             dynamic currentValue = new ExpandoObject();
+            currentValue.id = nativeInputs[0].id;
+            //LastChangedValue = nativeInputs.Length != 1 ? nativeInputs[0] : JObject.FromObject(new {lastchanged = false});
+
 
             //looking for bits
             if (bit <= 5 && bit >= 0)

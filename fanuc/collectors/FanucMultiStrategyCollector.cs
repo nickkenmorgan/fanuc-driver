@@ -19,20 +19,7 @@ public class FanucMultiStrategyCollector
 
   
         if (Configuration == null) Configuration = new Dictionary<object, object>();
-        /*
-        //check if we are using the Macro class, if we are convert from list to Dictionary
-        string str = Logger.Name.Substring(Logger.Name.Length - 5);
-        if (str == "Macro")
-        {
-            var temp = new List<object>(Configuration);
-            Configuration = new Dictionary<object, object>();
-            for (var i = 0; i < temp.Count; i++)
-            {
-                Configuration.Add(i, temp[i]);
-            }
-        }
-
-        */
+ 
         //check if we are using the Macro class, if we are convert from list to Dictionary
         string Macrostr = Logger.Name.Substring(Logger.Name.Length - 5);
         string Pmcstr = Logger.Name.Substring(Logger.Name.Length - 3);

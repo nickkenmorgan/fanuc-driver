@@ -41,7 +41,7 @@ public class Pmc : FanucMultiStrategyCollector
                 {
                     adr_type = f_adr_type(addr[0]);
                     data_type = 0;
-                    length = (ushort)(18);
+                    length = (ushort)(25);
                     s_number = 4933;
                     e_number = 4934;
                     bit = addr[addr.Length - 1] - '0';
@@ -50,7 +50,7 @@ public class Pmc : FanucMultiStrategyCollector
                 {
                     adr_type = f_adr_type(addr[0]);
                     data_type = 0;
-                    length = (ushort)(18);
+                    length = (ushort)(25);
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number + 1);
                     bit = 6;
@@ -88,7 +88,7 @@ public class Pmc : FanucMultiStrategyCollector
                 await Strategy.Peel("pmc",
                 new[]
                     {
-                await Strategy.SetNativeKeyed(id, await Strategy.Platform.RdPmcRngAsync(adr_type, data_type, s_number, e_number, length, IODBPMC_type, bit)),
+                await Strategy.SetNativeKeyed(id, await Strategy.Platform.RdPmcRngAsync(adr_type, data_type, s_number, e_number, length, IODBPMC_type, bit, id)),
                     },
                     new dynamic[]
                     {

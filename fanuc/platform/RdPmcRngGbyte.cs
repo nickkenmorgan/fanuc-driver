@@ -3,15 +3,25 @@ namespace l99.driver.fanuc;
 public partial class Platform
 {
     
-    
-    public async Task<dynamic> RdPmcRngAsync(short adr_type, short data_type, ushort s_number, ushort e_number,
-        ushort length, int IODBPMC_type, int bit, string id)
+    public async Task<dynamic> RdPmcRngGByteAsync(ushort number)
     {
-        return await Task.FromResult(RdPmcRng(adr_type, data_type, s_number, e_number, length, IODBPMC_type, bit, id));
+        return await Task.FromResult(RdPmcRngG(0, 0, number, number, 8 + 1, 0, 0));
     }
 
-    public dynamic RdPmcRng(short adr_type, short data_type, ushort s_number, ushort e_number, ushort length,
-        int IODBPMC_type, int bit, string id)
+    public async Task<dynamic> RdPmcRngYByteAsync(ushort number)
+    {
+        return await Task.FromResult(RdPmcRngG(2, 0, number, number, 8 + 1, 0, 0));
+    }
+    
+
+    public async Task<dynamic> RdPmcRngGAsync(short adr_type, short data_type, ushort s_number, ushort e_number,
+        ushort length, int IODBPMC_type, int bit)
+    {
+        return await Task.FromResult(RdPmcRngG(adr_type, data_type, s_number, e_number, length, IODBPMC_type, bit));
+    }
+
+    public dynamic RdPmcRngG(short adr_type, short data_type, ushort s_number, ushort e_number, ushort length,
+        int IODBPMC_type, int bit)
     {
         dynamic buf = new object();
 
@@ -42,7 +52,6 @@ public partial class Platform
             doc = $"{_docBasePath}/pmc/pmc_rdpmcrng",
             success = ndr.RC == Focas.EW_OK,
             rc = ndr.RC,
-            id = id,
             request = new {pmc_rdpmcrng = new {adr_type, data_type, s_number, e_number, length, IODBPMC_type, bit}},
             response = new {pmc_rdpmcrng = new {buf, IODBPMC_type = buf.GetType().Name}}
         };
