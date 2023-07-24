@@ -72,7 +72,7 @@ machines:
   ##
   - id: f_sim_mqtt_long
     ## enabled: enable or disable collection for this machine
-    enabled: !!bool true
+    enabled: !!bool false
     ## type: machine type
     type: l99.driver.fanuc.FanucMachine, fanuc
     ## strategy: strategy type
@@ -269,7 +269,7 @@ machines:
   ## mtconnect example
   ##
   - id: f_sim_mtc_long
-    enabled: !!bool false
+    enabled: !!bool true
     type: l99.driver.fanuc.FanucMachine, fanuc
     strategy: l99.driver.fanuc.strategies.FanucMultiStrategy, fanuc
     handler: l99.driver.fanuc.handlers.FanucOne, fanuc
@@ -296,6 +296,8 @@ machines:
       - l99.driver.fanuc.collectors.GCodeData, fanuc
       - l99.driver.fanuc.collectors.AxisData, fanuc
       - l99.driver.fanuc.collectors.SpindleData, fanuc
+      - l99.driver.fanuc.collectors.Macro, fanuc
+      - l99.driver.fanuc.collectors.Pmc, fanuc
     l99.driver.fanuc.handlers.FanucOne, fanuc:
       change_only: !!bool false
       skip_internal: !!bool true
@@ -319,6 +321,60 @@ machines:
       stateful: !!bool true
     l99.driver.fanuc.collectors.Messages, fanuc:
       stateful: !!bool true
+    l99.driver.fanuc.collectors.Macro, fanuc:
+    - id: remaining_bar_length
+      level: path
+      number: !!int 730
+    - id: new_bar_length
+      level: path
+      number: !!int 731
+    - id: path_length
+      level: path
+      number: !!int 720
+    - id: faceoff_length
+      level: path
+      number: !!int 723
+    - id: ejector_length
+      level: path
+      number: !!int 718
+
+    l99.driver.fanuc.collectors.Pmc, fanuc:
+    - id: run_status_running_tracking
+      address: D4933.0
+      type: bit
+    - id: run_status_running_no_part
+      address: D4933.1
+      type: bit
+    - id: run_status_idle_pending
+      address: D4933.2
+      type: bit
+    - id: run_status_idle
+      address: D4933.3
+      type: bit
+    - id: run_status_faulted
+      address: D4933.4
+      type: bit
+#    - id: run_status_starved
+#      address: D4933.5
+#      type: bit
+    - id: run_status_byte
+      address: D4933
+      type: byte
+    - id: parts_loaded_counter
+      address: D4068
+      type: long
+    - id: parts_good_counter
+      address: D4987
+      type: long
+    - id: parts_bad_counter
+      address: D4991
+      type: long
+    - id: parts_unloaded_counter
+      address: D4995
+      type: long
+    - id: last_cycle_time
+      address: D4004
+      type: word
 
     ##
     ## sparkplubg example

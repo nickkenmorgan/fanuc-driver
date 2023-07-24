@@ -35,7 +35,7 @@ public class Macro : FanucMultiStrategyCollector
             }
         }
 
-        Strategy.SetNativeKeyed("macroDict", new Dictionary<dynamic, dynamic>(combinedDict));
+       // await Strategy.SetNativeKeyed("macroDict", new Dictionary<dynamic, dynamic>(combinedDict));
 
         await Strategy.Peel("macro",
             new dynamic[]

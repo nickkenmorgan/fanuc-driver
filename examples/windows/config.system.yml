@@ -585,6 +585,30 @@ system:
         ShdrConditionFaultIf p+`_alm_lnk` (! data.status_lnk) null null;
         ShdrConditionSeverity p+`_alm_amp` (data.error > 0) (data.warning > 0) (data.error == 0 && data.warning == 0);
 
+      l99.driver.fanuc.veneers.Macro, fanuc: >-
+        ## get path number and axis name ##
+        p = device+`_p`+observation.marker[0].number;
+
+        ## variables ##
+        ## convert dict to array ##
+        macroInfo = ConvertToArray data;
+
+      l99.driver.fanuc.veneers.Pmc, fanuc: >-
+        ## get path number and axis name ##
+        p = device+`_p`+observation.marker[0].number;
+
+        ## variables ##
+        ## convert dict to array ##
+        pmcInfo = ConvertToArray data;
+
+        parts_good_counter = array.set pmcInfo `parts_good_counter` 
+        
+
+        ## events ##
+        ShdrEvent p+`_part_count_good` parts_good_counter.cdata;
+
+
+
   machine-disabled: &machine-disabled
     enabled: !!bool false
   machine-base: &machine-base

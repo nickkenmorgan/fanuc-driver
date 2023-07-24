@@ -97,7 +97,7 @@ public class Pmc : FanucMultiStrategyCollector
                 //Bit
                 if (bit <= 5 && bit >= 0)
                 {
-                    pmcExpando.cdata = pmc.response.pmc_rdpmcrng.buf.cdata[bit];
+                    pmcExpando.cdata = (pmc.response.pmc_rdpmcrng.buf.cdata[0] >> bit) &1;
                 }
 
                 //Byte
@@ -136,7 +136,7 @@ public class Pmc : FanucMultiStrategyCollector
             }
         }
 
-        Strategy.SetNativeKeyed("pmcDict", new Dictionary<dynamic, dynamic>(combinedDict));
+        // await Strategy.SetNativeKeyed("pmcDict", new Dictionary<dynamic, dynamic>(combinedDict));
 
         await Strategy.Peel("pmc",
             new dynamic[]
