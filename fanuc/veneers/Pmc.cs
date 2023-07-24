@@ -13,47 +13,19 @@ public class Pmc : Veneer
     }
     protected override async Task<dynamic> AnyAsync(dynamic[] nativeInputs, dynamic[] additionalInputs)
     {
-        if (nativeInputs.All(o => o.success == true))
+        bool success = true;
+        foreach(var pmclist in nativeInputs[0])
         {
-            
-
-           var buff = nativeInputs[0];
-            var bit = nativeInputs[0].request.pmc_rdpmcrng.bit;
-            dynamic currentValue = new ExpandoObject();
-            currentValue.id = nativeInputs[0].id;
-            //LastChangedValue = nativeInputs.Length != 1 ? nativeInputs[0] : JObject.FromObject(new {lastchanged = false});
-
-
-            //looking for bits
-            if (bit <= 5 && bit >= 0)
+            if (!pmclist.Value.data.success)
             {
-                currentValue.type = "Bit";
-                currentValue.cdata = nativeInputs[0].response.pmc_rdpmcrng.buf.cdata[bit];
+                success = false;
+                break;
             }
-            else if (bit == 6)
-            {
-                currentValue.type = "Byte";
-                currentValue.cdata = nativeInputs[0].response.pmc_rdpmcrng.buf.cdata;
-            }
-            else if (bit == 7)
-            {
-                currentValue.type = "Word";
-                currentValue.cdata = nativeInputs[0].response.pmc_rdpmcrng.buf.idata;
-            }
-            else if (bit == 8)
-            {
-                currentValue.type = "Long";
-                currentValue.cdata = nativeInputs[0].response.pmc_rdpmcrng.buf.ldata;
-            }
-            else
-            {
-                currentValue.type = "32 Float";
-                currentValue.cdata = nativeInputs[0].response.pmc_rdpmcrng.buf.cdata;
-            }
-            //   var buff = nativeInputs[0];
-
-            // convert state list to dictionary
-            currentValue.Buffer = buff;
+       
+        }
+        if (success)
+        {
+            var currentValue = nativeInputs[0];
 
             await OnDataArrivedAsync(nativeInputs, additionalInputs, currentValue);
 

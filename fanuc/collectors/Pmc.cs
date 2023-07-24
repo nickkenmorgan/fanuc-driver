@@ -1,5 +1,8 @@
 ﻿using l99.driver.fanuc.strategies;
+using l99.driver.fanuc.veneers;
 using MTConnect.Observations.Samples.Values;
+using System.Collections.Generic;
+using System.Dynamic;
 using System.Numerics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -21,6 +24,7 @@ public class Pmc : FanucMultiStrategyCollector
     public override async Task CollectForEachPathAsync(short currentPath, string[] axis, string[] spindle,
         dynamic pathMarker)
     {
+        var combinedDict = new Dictionary<dynamic, dynamic>();
 
         foreach (var PmcEntry in Configuration)
         {
@@ -84,17 +88,66 @@ public class Pmc : FanucMultiStrategyCollector
                     e_number = (ushort)(s_number + 1);
                 }
 
-                
-                await Strategy.Peel("pmc",
-                new[]
-                    {
-                await Strategy.SetNativeKeyed(id, await Strategy.Platform.RdPmcRngAsync(adr_type, data_type, s_number, e_number, length, IODBPMC_type, bit, id)),
-                    },
-                    new dynamic[]
-                    {
-                    });
+
+                dynamic pmc =  await Strategy.Platform.RdPmcRngAsync(adr_type, data_type, s_number, e_number, length, IODBPMC_type, bit, id);
+                dynamic pmcExpando = new ExpandoObject();
+
+                pmcExpando.data = pmc;
+
+                //Bit
+                if (bit <= 5 && bit >= 0)
+                {
+                    pmcExpando.cdata = pmc.response.pmc_rdpmcrng.buf.cdata[bit];
+                }
+
+                //Byte
+                else if (bit == 6)
+                {
+                    pmcExpando.cdata = pmc.response.pmc_rdpmcrng.buf.cdata;
+                }
+
+                //Word
+                else if (bit == 7)
+                {
+                    pmcExpando.idata = pmc.response.pmc_rdpmcrng.buf.idata;
+                }
+
+                //Long
+                else if (bit == 8)
+                {
+                    pmcExpando.ldata = pmc.response.pmc_rdpmcrng.buf.ldata;
+                }
+
+                //32 float
+                else
+                {
+                    pmcExpando.cdata = pmc.response.pmc_rdpmcrng.buf.cdata;
+                }
+
+
+
+                combinedDict.Add(pmc.id + "_" + type, pmcExpando);
+
+
+
+
+
+
             }
         }
+
+        Strategy.SetNativeKeyed("pmcDict", new Dictionary<dynamic, dynamic>(combinedDict));
+
+        await Strategy.Peel("pmc",
+            new dynamic[]
+            {
+                combinedDict
+            },
+            new dynamic[]
+            {
+            });
+
+
 
     }
 

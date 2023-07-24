@@ -1,4 +1,5 @@
 ﻿using l99.driver.fanuc.strategies;
+using System;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // ReSharper disable once CheckNamespace
@@ -19,25 +20,31 @@ public class Macro : FanucMultiStrategyCollector
     public override async Task CollectForEachPathAsync(short currentPath, string[] axis, string[] spindle,
         dynamic pathMarker)
     {
- 
+
+        var combinedDict = new Dictionary<dynamic, dynamic>();
+
         foreach (var macroEntry in Configuration)
         {
             if (macroEntry.ContainsKey("id"))
             {
                 var id = macroEntry["id"];
                 short num = (short)macroEntry["number"];
+                dynamic macro = await Strategy.Platform.RdMacroAsync(id, num, 10);
 
-                await Strategy.Peel("macro",
-                    new[]
-                    {
-                    await Strategy.SetNativeKeyed(id, await Strategy.Platform.RdMacroAsync(id, num, 10)),
-                    },
-                    new dynamic[]
-                    {
-                    });
+                combinedDict.Add(id, macro);
             }
         }
 
+        Strategy.SetNativeKeyed("macroDict", new Dictionary<dynamic, dynamic>(combinedDict));
+
+        await Strategy.Peel("macro",
+            new dynamic[]
+            {
+                combinedDict
+            },
+            new dynamic[]
+            {
+            });
 
     }
 }

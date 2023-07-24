@@ -13,25 +13,20 @@ public class Macro : Veneer
     }
     protected override async Task<dynamic> AnyAsync(dynamic[] nativeInputs, dynamic[] additionalInputs)
     {
-        if (nativeInputs.All(o => o.success == true))
+
+        bool success = true;
+        foreach (var macrolist in nativeInputs[0])
         {
-            var datano = nativeInputs[0].response.cnd_rdmacro.macro.datano;
-            var mcr_val =  nativeInputs[0].response.cnd_rdmacro.macro.mcr_val;
-            var id = nativeInputs[0].response.id;
-         //   var size = nativeInputs[0].response.size;
+            if (!macrolist.Value.success)
+            {
+                success = false;
+                break;
+            }
 
-            dynamic state = new ExpandoObject();
-           //state.id = id;
-            state.datano = datano;
-            state.mcr_val = mcr_val;
-
-            Dictionary<dynamic, dynamic> dict = new Dictionary<dynamic, dynamic>();
-           // dict.Add(id, state);
-           dict.Add(id, nativeInputs[0]);
-            dynamic currentValue = new ExpandoObject();
-            // convert state list to dictionary
-            currentValue.Macro = dict;
-
+        }
+        if (success)
+        {
+            dynamic currentValue = nativeInputs[0];
             await OnDataArrivedAsync(nativeInputs, additionalInputs, currentValue);
 
             if (((object)currentValue).IsDifferentString((object) LastChangedValue))
