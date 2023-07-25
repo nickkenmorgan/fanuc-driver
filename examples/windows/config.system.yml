@@ -593,6 +593,8 @@ system:
         ## convert dict to array ##
         macroInfo = ConvertToArray data;
 
+        ShdrEvent `remaining_bar_length` data.remaining_bar_length.response.cnd_rdmacro.macro.datano;
+
       l99.driver.fanuc.veneers.Pmc, fanuc: >-
         ## get path number and axis name ##
         p = device+`_p`+observation.marker[0].number;
