@@ -599,13 +599,11 @@ system:
 
         ## variables ##
         ## convert dict to array ##
-        pmcInfo = ConvertToArray data;
-
-        parts_good_counter = array.set pmcInfo `parts_good_counter` 
+        pmcInfo = ConvertToArray data.pmc;
         
-
         ## events ##
-        ShdrEvent p+`_part_count_good` parts_good_counter.cdata;
+        ShdrEvent p+`_part_count_good` data.pmc.parts_good_counter_long.ldata;
+        ShdrEvent p+`_part_count_bad` data.pmc.parts_bad_counter_long.ldata;
 
 
 

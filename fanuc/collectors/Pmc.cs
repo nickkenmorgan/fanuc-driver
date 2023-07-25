@@ -32,6 +32,7 @@ public class Pmc : FanucMultiStrategyCollector
             {
                 var id = PmcEntry["id"];
                 var addr = PmcEntry["address"];
+               // addr = addr.Insert(1, "0");
                 var type = PmcEntry["type"];
                 short adr_type = 0;
                 short data_type = 0;
@@ -45,37 +46,39 @@ public class Pmc : FanucMultiStrategyCollector
                 {
                     adr_type = f_adr_type(addr[0]);
                     data_type = 0;
-                    length = (ushort)(25);
+                    length = (ushort)(9);
                     s_number = 4933;
-                    e_number = 4934;
+                    e_number = 4933;
                     bit = addr[addr.Length - 1] - '0';
                 }
                 else if (type == "byte")
                 {
                     adr_type = f_adr_type(addr[0]);
                     data_type = 0;
-                    length = (ushort)(25);
+                    length = (ushort)(9);
                     s_number = ushort.Parse(addr.Substring(1));
-                    e_number = (ushort)(s_number + 1);
+                    e_number = (ushort)(s_number);
                     bit = 6;
                 }
                 else if (type == "word")
                 {
                     adr_type = f_adr_type(addr[0]);
                     data_type = 1;
-                    length = (ushort)(18);
+                    length = (ushort)(10);
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number + 1);
                     IODBPMC_type = 1;
                     bit = 7;
                 }
+
+                // is long 4 or 8 bytes?
                 else if (type == "long")
                 {
                     adr_type = f_adr_type(addr[0]);
                     data_type = 2;
-                    length = (ushort)(18);
+                    length = (ushort)(12);
                     s_number = ushort.Parse(addr.Substring(1));
-                    e_number = (ushort)(s_number + 1);
+                    e_number = (ushort)(s_number + 3);
                     IODBPMC_type = 2;
                     bit = 8;
                 }
@@ -83,9 +86,17 @@ public class Pmc : FanucMultiStrategyCollector
                 {
                     adr_type = f_adr_type(addr[0]);
                     data_type = 4;
-                    length = (ushort)(18);
+                    length = (ushort)(12);
                     s_number = ushort.Parse(addr.Substring(1));
-                    e_number = (ushort)(s_number + 1);
+                    e_number = (ushort)(s_number + 3);
+                }
+                else if (type == "float64")
+                {
+                    adr_type = f_adr_type(addr[0]);
+                    data_type = 5;
+                    length = (ushort)(16);
+                    s_number = ushort.Parse(addr.Substring(1));
+                    e_number = (ushort)(s_number + 7);
                 }
 
 
@@ -103,25 +114,25 @@ public class Pmc : FanucMultiStrategyCollector
                 //Byte
                 else if (bit == 6)
                 {
-                    pmcExpando.cdata = pmc.response.pmc_rdpmcrng.buf.cdata;
+                    pmcExpando.cdata = pmc.response.pmc_rdpmcrng.buf.cdata[0];
                 }
 
                 //Word
                 else if (bit == 7)
                 {
-                    pmcExpando.idata = pmc.response.pmc_rdpmcrng.buf.idata;
+                    pmcExpando.idata = pmc.response.pmc_rdpmcrng.buf.idata[0];
                 }
 
                 //Long
                 else if (bit == 8)
                 {
-                    pmcExpando.ldata = pmc.response.pmc_rdpmcrng.buf.ldata;
+                    pmcExpando.ldata = pmc.response.pmc_rdpmcrng.buf.ldata[0];
                 }
 
                 //32 float
                 else
                 {
-                    pmcExpando.cdata = pmc.response.pmc_rdpmcrng.buf.cdata;
+                    pmcExpando.cdata = pmc.response.pmc_rdpmcrng.buf.cdata[0];
                 }
 
 

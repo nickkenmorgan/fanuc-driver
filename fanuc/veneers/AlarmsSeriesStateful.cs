@@ -117,7 +117,7 @@ public class AlarmsSeriesStateful : AlarmsSeries
 
             dynamic currentValue = new ExpandoObject();
             // convert state list to dictionary
-            currentValue.alarms = currentStatesDict;
+             currentValue.alarms = currentStatesDict;
 
             await OnDataArrivedAsync(nativeInputs, additionalInputs, currentValue);
 

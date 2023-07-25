@@ -25,7 +25,9 @@ public class Pmc : Veneer
         }
         if (success)
         {
-            var currentValue = nativeInputs[0];
+
+            dynamic currentValue = new ExpandoObject();
+            currentValue.pmc = nativeInputs[0];
 
             await OnDataArrivedAsync(nativeInputs, additionalInputs, currentValue);
 
