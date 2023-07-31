@@ -21,94 +21,56 @@ public class Macro : FanucMultiStrategyCollector
         dynamic pathMarker)
         {
 
-            var combinedConfig = new Dictionary<dynamic, dynamic>();
-            var exclusionsList = new Dictionary<dynamic, dynamic>();
-
+            var combinedDict = new Dictionary<dynamic, dynamic>();
+             
+        
             foreach (var macroEntry in Configuration)
             {
-                    if (macroEntry.ContainsKey("id"))
+            bool exlusionbool = true;
+            var exclusionsList = new Dictionary<dynamic, dynamic>();
+
+            if (macroEntry.ContainsKey("id"))
                     {
                         var id = macroEntry["id"];
                         short num = (short)macroEntry["number"];
                         dynamic macro = await Strategy.Platform.RdMacroAsync(id, num, 10);
 
-                        combinedConfig.Add(id, macro);
-
                         if (macroEntry.ContainsKey("exclusions"))
                         {
                             exclusionsList = macroEntry["exclusions"];
+                            if (exclusionsList != null) {
+                                foreach (var exclusion in exclusionsList)
+                                {
+                                    if (exclusion.Key == currentPath.ToString())
+                                    {
+                                        exlusionbool = false;
+                                        break;
+
+                                    }
+                                }
+                            }
                         }
+
+                        if (exlusionbool) {
+                            combinedDict.Add(id, macro);
+                         }
+
+                         
+
+
                     }
             }
 
-           await Strategy.SetKeyed("macroConfig", new Dictionary<dynamic, dynamic>(combinedConfig));
 
-            if (exclusionsList != null)
+        await Strategy.Peel("macro",
+            new dynamic[]
             {
-                await Strategy.SetKeyed("exclusionsList", exclusionsList);
-            }
-
-
-        }
-
-    public override async Task CollectForEachAxisAsync(short currentPath, short currentAxis, string axisName,
-        dynamic axisSplit, dynamic axisMarker)
-    {
-
-
-        var combinedDict = new Dictionary<dynamic, dynamic>();
-        var exclusionsList = new Dictionary<dynamic, dynamic>();
-
-        exclusionsList = Strategy.Get($"exclusionsList+{currentPath}");
-        combinedDict = Strategy.Get($"macroConfig+{currentPath}");
-
-        var path = "-1";
-        var axis = new List<dynamic>();
-        bool isAxis = true;
-
-        //are there exclusions in the config
-        if (exclusionsList != null)
-        {
-            foreach (var exclusion in exclusionsList)
-            {
-                path = exclusion.Key;
-                if (path == currentPath.ToString())
-                {
-                    if (exclusion.Value != null)
-                    {
-                        axis = new List<dynamic>(exclusion.Value);
-                    }
-                    else
-                    {
-                        axis.Add(
-                            "none"
-                        );
-                    }
-                    break;
-                }
-            }
-
-            foreach (var axisLetter in axis)
-            {
-                if (axisLetter.ToString() == axisName || axisLetter.ToString() == "%")
-                {
-                    isAxis = false;
-                    break;
-                }
-            }
-        }
-
-        if (isAxis)
-        {
-            await Strategy.Peel("macro",
-                new dynamic[]
-                {
                 combinedDict
-                },
-                new dynamic[]
-                {
-                });
-        }
+            },
+            new dynamic[]
+            {
+            });
 
     }
+
 }
