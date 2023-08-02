@@ -236,10 +236,10 @@ machines:
 
     l99.driver.fanuc.collectors.Pmc, fanuc:
     - id: run_status_running_tracking
-      address: D4933.0
+      address: D0000.0
       type: bit
     - id: run_status_running_no_part
-      address: D4933.1
+      address: D0000.1
       type: bit
     - id: run_status_idle_pending
       address: D4933.2
@@ -372,10 +372,10 @@ machines:
 
     l99.driver.fanuc.collectors.Pmc, fanuc:
     - id: run_status_running_tracking
-      address: D4933.0
+      address: D0000.0
       type: bit
     - id: run_status_running_no_part
-      address: D4933.1
+      address: D0000.1
       type: bit
     - id: run_status_idle_pending
       address: D4933.2

@@ -32,7 +32,6 @@ public class Pmc : FanucMultiStrategyCollector
             {
                 var id = PmcEntry["id"];
                 var addr = PmcEntry["address"];
-               // addr = addr.Insert(1, "0");
                 var type = PmcEntry["type"];
                 short adr_type = 0;
                 short data_type = 0;
@@ -47,8 +46,8 @@ public class Pmc : FanucMultiStrategyCollector
                     adr_type = f_adr_type(addr[0]);
                     data_type = 0;
                     length = (ushort)(9);
-                    s_number = 4933;
-                    e_number = 4933;
+                    s_number = ushort.Parse(addr.Substring(1, addr.Length - 3));
+                    e_number = s_number;
                     bit = addr[addr.Length - 1] - '0';
                 }
                 else if (type == "byte")
