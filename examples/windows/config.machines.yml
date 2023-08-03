@@ -206,8 +206,7 @@ machines:
     - id: test
       level: path
       exclusions: 
-        1: [X]
-      number: !!int 500
+      number: !!int 707
     - id: remaining_bar_length
       level: path
       exclusions: 
@@ -221,7 +220,7 @@ machines:
     - id: path_length
       level: path
       exclusions: 
-        1: [%]      
+        1:       
       number: !!int 720
     - id: faceoff_length
       level: path
@@ -231,10 +230,19 @@ machines:
     - id: ejector_length
       level: path
       exclusions: 
-        1: [S]      
+        1:       
       number: !!int 718
 
     l99.driver.fanuc.collectors.Pmc, fanuc:
+    - id: parts_good_counter
+      address: D4987
+      type: float32
+    - id: last_cycle_time
+      address: R0050
+      type: word
+    - id: run_status_byte
+      address: D0016
+      type: byte
     - id: run_status_running_tracking
       address: D0000.0
       type: bit
@@ -253,14 +261,8 @@ machines:
     - id: run_status_starved
       address: D4933.5
       type: bit
-    - id: run_status_byte
-      address: D4933
-      type: byte
     - id: parts_loaded_counter
       address: D4068
-      type: long
-    - id: parts_good_counter
-      address: D4987
       type: long
     - id: parts_bad_counter
       address: D4991
@@ -268,9 +270,7 @@ machines:
     - id: parts_unloaded_counter
       address: D4995
       type: long
-    - id: last_cycle_time
-      address: D4004
-      type: word
+
   #   - id: target_cycle_time
   #    address: D4854
   #    type: float32      

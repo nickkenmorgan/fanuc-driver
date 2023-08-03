@@ -57,7 +57,7 @@ public class Pmc : FanucMultiStrategyCollector
                     length = (ushort)(9);
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number);
-                    bit = 6;
+                    bit = 10;
                 }
                 else if (type == "word")
                 {
@@ -67,7 +67,7 @@ public class Pmc : FanucMultiStrategyCollector
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number + 1);
                     IODBPMC_type = 1;
-                    bit = 7;
+                    bit = 11;
                 }
 
                 // is long 4 or 8 bytes?
@@ -79,7 +79,7 @@ public class Pmc : FanucMultiStrategyCollector
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number + 3);
                     IODBPMC_type = 2;
-                    bit = 8;
+                    bit = 12;
                 }
                 else if (type == "float32")
                 {
@@ -88,6 +88,7 @@ public class Pmc : FanucMultiStrategyCollector
                     length = (ushort)(12);
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number + 3);
+                    bit = 13;
                 }
                 else if (type == "float64")
                 {
@@ -96,6 +97,7 @@ public class Pmc : FanucMultiStrategyCollector
                     length = (ushort)(16);
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number + 7);
+                    bit = 14;
                 }
 
 
@@ -105,43 +107,38 @@ public class Pmc : FanucMultiStrategyCollector
                 pmcExpando.data = pmc;
 
                 //Bit
-                if (bit <= 5 && bit >= 0)
+                if (bit <= 7 && bit >= 0)
                 {
                     pmcExpando.cdata = (pmc.response.pmc_rdpmcrng.buf.cdata[0] >> bit) &1;
                 }
 
                 //Byte
-                else if (bit == 6)
+                else if (bit == 10)
                 {
                     pmcExpando.cdata = pmc.response.pmc_rdpmcrng.buf.cdata[0];
                 }
 
                 //Word
-                else if (bit == 7)
+                else if (bit == 11)
                 {
                     pmcExpando.idata = pmc.response.pmc_rdpmcrng.buf.idata[0];
                 }
 
                 //Long
-                else if (bit == 8)
+                else if (bit == 12)
                 {
                     pmcExpando.ldata = pmc.response.pmc_rdpmcrng.buf.ldata[0];
                 }
-
-                //32 float
-                else
+                else if (bit == 13)
                 {
-                    pmcExpando.cdata = pmc.response.pmc_rdpmcrng.buf.cdata[0];
+                    pmcExpando.fdata = pmc.response.pmc_rdpmcrng.buf.ldata[0];
+                }
+                else if (bit == 14)
+                {
+                    pmcExpando.dfdata = pmc.response.pmc_rdpmcrng.buf.ldata[0];
                 }
 
-
-
                 combinedDict.Add(pmc.id + "_" + type, pmcExpando);
-
-
-
-
-
 
             }
         }

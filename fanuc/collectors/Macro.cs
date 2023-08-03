@@ -22,44 +22,28 @@ public class Macro : FanucMultiStrategyCollector
         {
 
             var combinedDict = new Dictionary<dynamic, dynamic>();
-             
-        
-            foreach (var macroEntry in Configuration)
-            {
+
+
+        foreach (var macroEntry in Configuration)
+        {
             bool exlusionbool = true;
             var exclusionsList = new Dictionary<dynamic, dynamic>();
 
-            if (macroEntry.ContainsKey("id"))
-                    {
-                        var id = macroEntry["id"];
-                        short num = (short)macroEntry["number"];
-                        dynamic macro = await Strategy.Platform.RdMacroAsync(id, num, 10);
-
-                        if (macroEntry.ContainsKey("exclusions"))
-                        {
-                            exclusionsList = macroEntry["exclusions"];
-                            if (exclusionsList != null) {
-                                foreach (var exclusion in exclusionsList)
-                                {
-                                    if (exclusion.Key == currentPath.ToString())
-                                    {
-                                        exlusionbool = false;
-                                        break;
-
-                                    }
-                                }
-                            }
-                        }
-
-                        if (exlusionbool) {
-                            combinedDict.Add(id, macro);
-                         }
-
-                         
+            if (macroEntry.ContainsKey("exclusions"))
+            {
+                exclusionsList = macroEntry["exclusions"];
+                bool exclusionBool = exclusionsList?.Any(exclusion => exclusion.Key == currentPath.ToString()) ?? true;
 
 
-                    }
+                if (exlusionbool)
+                {
+                    var id = macroEntry["id"];
+                    short num = (short)macroEntry["number"];
+                    dynamic macro = await Strategy.Platform.RdMacroAsync(id, num, 10);
+                    combinedDict.Add(id, macro);
+                }
             }
+        }
 
 
         await Strategy.Peel("macro",
