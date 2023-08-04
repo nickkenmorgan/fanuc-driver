@@ -25,6 +25,7 @@ public class Pmc : FanucMultiStrategyCollector
         dynamic pathMarker)
     {
         var combinedDict = new Dictionary<dynamic, dynamic>();
+        var finalDict = new Dictionary<dynamic, dynamic>();
 
         foreach (var PmcEntry in Configuration)
         {
@@ -81,6 +82,7 @@ public class Pmc : FanucMultiStrategyCollector
                     IODBPMC_type = 2;
                     bit = 12;
                 }
+
                 else if (type == "float32")
                 {
                     adr_type = f_adr_type(addr[0]);
@@ -88,8 +90,8 @@ public class Pmc : FanucMultiStrategyCollector
                     length = (ushort)(12);
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number + 3);
-                    bit = 13;
-                }
+                    IODBPMC_type = 2;
+                }   
                 else if (type == "float64")
                 {
                     adr_type = f_adr_type(addr[0]);
@@ -97,7 +99,7 @@ public class Pmc : FanucMultiStrategyCollector
                     length = (ushort)(16);
                     s_number = ushort.Parse(addr.Substring(1));
                     e_number = (ushort)(s_number + 7);
-                    bit = 14;
+                    IODBPMC_type = 2;
                 }
 
 
@@ -109,36 +111,42 @@ public class Pmc : FanucMultiStrategyCollector
                 //Bit
                 if (bit <= 7 && bit >= 0)
                 {
-                    pmcExpando.cdata = (pmc.response.pmc_rdpmcrng.buf.cdata[0] >> bit) &1;
+                    pmcExpando.dataout = (pmc.response.pmc_rdpmcrng.buf.cdata[0] >> bit) &1;
                 }
 
                 //Byte
                 else if (bit == 10)
                 {
-                    pmcExpando.cdata = pmc.response.pmc_rdpmcrng.buf.cdata[0];
+                    pmcExpando.dataout = pmc.response.pmc_rdpmcrng.buf.cdata[0];
                 }
 
                 //Word
                 else if (bit == 11)
                 {
-                    pmcExpando.idata = pmc.response.pmc_rdpmcrng.buf.idata[0];
+                    pmcExpando.dataout = pmc.response.pmc_rdpmcrng.buf.idata[0];
                 }
 
                 //Long
                 else if (bit == 12)
                 {
-                    pmcExpando.ldata = pmc.response.pmc_rdpmcrng.buf.ldata[0];
-                }
-                else if (bit == 13)
-                {
-                    pmcExpando.fdata = pmc.response.pmc_rdpmcrng.buf.ldata[0];
-                }
-                else if (bit == 14)
-                {
-                    pmcExpando.dfdata = pmc.response.pmc_rdpmcrng.buf.ldata[0];
+                    pmcExpando.dataout = pmc.response.pmc_rdpmcrng.buf.ldata[0];
                 }
 
+                //32 float
+                else
+                {
+                    pmcExpando.dataout = pmc.response.pmc_rdpmcrng.buf.ldata[0];
+                }
+
+
+
                 combinedDict.Add(pmc.id + "_" + type, pmcExpando);
+                finalDict.Add(pmc.id + "_" + type, pmcExpando.dataout);
+
+
+
+
+
 
             }
         }
@@ -148,8 +156,10 @@ public class Pmc : FanucMultiStrategyCollector
         await Strategy.Peel("pmc",
             new dynamic[]
             {
-                combinedDict
-            },
+                combinedDict,
+                finalDict
+
+    },
             new dynamic[]
             {
             });

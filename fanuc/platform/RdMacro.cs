@@ -2,12 +2,12 @@ namespace l99.driver.fanuc;
 
 public partial class Platform
 {
-    public async Task<dynamic> RdMacroAsync(string id, short number = 1, short length = 10)
+    public async Task<dynamic> RdMacroAsync(short number = 1, short length = 10)
     {
-        return await Task.FromResult(RdMacro(id, number, length));
+        return await Task.FromResult(RdMacro(number, length));
     }
 
-    public dynamic RdMacro(string id, short number = 1 , short length = 10)
+    public dynamic RdMacro(short number = 1 , short length = 10)
     {
         var macro = new Focas.ODBM();
 

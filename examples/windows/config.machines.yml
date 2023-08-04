@@ -204,39 +204,35 @@ machines:
     l99.driver.fanuc.collectors.Macro, fanuc:
 
     - id: test
-      level: path
-      exclusions: 
-      number: !!int 707
-    - id: remaining_bar_length
-      level: path
-      exclusions: 
+      path: 1
+      number: !!int 100
 
+    - id: remaining_bar_length
+      path: 1
       number: !!int 730
+
     - id: new_bar_length
-      level: path
-      exclusions: 
-   
+      path: 1  
       number: !!int 731
+
     - id: path_length
-      level: path
-      exclusions: 
-        1:       
+      path: 1       
       number: !!int 720
+
     - id: faceoff_length
-      level: path
-      exclusions: 
-     
+      path: [1, 2]
       number: !!int 723
+
     - id: ejector_length
-      level: path
-      exclusions: 
-        1:       
+      path:    
       number: !!int 718
 
     l99.driver.fanuc.collectors.Pmc, fanuc:
-    - id: parts_good_counter
-      address: D4987
-      type: float32
+    
+ #   - id: parts_good_counter
+ #     address: D4987
+ #     type: float64
+
     - id: last_cycle_time
       address: R0050
       type: word

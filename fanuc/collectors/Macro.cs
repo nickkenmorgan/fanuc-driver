@@ -1,5 +1,6 @@
 ﻿using l99.driver.fanuc.strategies;
 using System;
+using System.Dynamic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // ReSharper disable once CheckNamespace
@@ -22,25 +23,44 @@ public class Macro : FanucMultiStrategyCollector
         {
 
             var combinedDict = new Dictionary<dynamic, dynamic>();
+            var finalDict = new Dictionary<dynamic, dynamic>();
 
 
         foreach (var macroEntry in Configuration)
         {
-            bool exlusionbool = true;
-            var exclusionsList = new Dictionary<dynamic, dynamic>();
+            bool pathbool = false;
 
-            if (macroEntry.ContainsKey("exclusions"))
+            if (macroEntry.ContainsKey("path"))
             {
-                exclusionsList = macroEntry["exclusions"];
-                bool exclusionBool = exclusionsList?.Any(exclusion => exclusion.Key == currentPath.ToString()) ?? true;
+
+                //checks if the value is a string or a list and stores in pathlist
+                var pathList = macroEntry["path"] switch
+                {
+                    List<string> list => list,
+                    List<object> objectList => objectList.Select(obj => obj.ToString()).ToList(),
+                    string singleValue => new List<string> { singleValue },
+                    _ => new List<string>()
+                };
+
+                pathbool = pathList.Any(path => path == currentPath.ToString());
 
 
-                if (exlusionbool)
+                if (pathbool)
                 {
                     var id = macroEntry["id"];
                     short num = (short)macroEntry["number"];
-                    dynamic macro = await Strategy.Platform.RdMacroAsync(id, num, 10);
-                    combinedDict.Add(id, macro);
+                    dynamic macro = await Strategy.Platform.RdMacroAsync(num, 10);
+                    double macroVal = macro.response.cnd_rdmacro.macro.mcr_val;
+                    var dec_val = macro.response.cnd_rdmacro.macro.dec_val;
+                    macroVal = macroVal / (double)Math.Pow(10, dec_val);
+                    var nr = new
+                    {
+                        id = id,
+                        Value = macroVal
+                    };
+
+                    combinedDict.Add(id + "_macro", macro);
+                    finalDict.Add(id, nr);
                 }
             }
         }
@@ -49,7 +69,8 @@ public class Macro : FanucMultiStrategyCollector
         await Strategy.Peel("macro",
             new dynamic[]
             {
-                combinedDict
+                combinedDict,
+                finalDict
             },
             new dynamic[]
             {

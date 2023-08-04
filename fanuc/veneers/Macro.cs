@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System;
+using System.Dynamic;
 using l99.driver.@base;
 using YamlDotNet.Core.Tokens;
 
@@ -27,7 +28,8 @@ public class Macro : Veneer
         }
         if (success)
         {
-            dynamic currentValue = nativeInputs[0];
+
+            dynamic currentValue = nativeInputs[1];
             await OnDataArrivedAsync(nativeInputs, additionalInputs, currentValue);
 
             if (((object)currentValue).IsDifferentString((object) LastChangedValue))
