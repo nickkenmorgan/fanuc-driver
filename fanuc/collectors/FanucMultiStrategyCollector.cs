@@ -23,7 +23,9 @@ public class FanucMultiStrategyCollector
         //check if we are using the Macro class, if we are convert from list to Dictionary
         string Macrostr = Logger.Name.Substring(Logger.Name.Length - 5);
         string Pmcstr = Logger.Name.Substring(Logger.Name.Length - 3);
-        if (Macrostr == "Macro" || Pmcstr == "Pmc")
+        string Parameterstr = Logger.Name.Substring(Logger.Name.Length - 13);
+        string Diagnosticstr = Logger.Name.Substring(Logger.Name.Length - 14);
+        if (Macrostr == "Macro" || Pmcstr == "Pmc" || Parameterstr == "ParameterInfo" || Diagnosticstr == "DiagnosticInfo")
         {
             if (!Configuration[Configuration.Count - 1].ContainsKey("enabled")) {
                 Dictionary<object, object> keyValue = new Dictionary<object, object>

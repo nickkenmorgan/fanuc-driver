@@ -123,6 +123,8 @@ machines:
       - l99.driver.fanuc.collectors.SpindleData, fanuc
       - l99.driver.fanuc.collectors.Macro, fanuc
       - l99.driver.fanuc.collectors.Pmc, fanuc
+      - l99.driver.fanuc.collectors.ParameterInfo, fanuc
+      - l99.driver.fanuc.collectors.DiagnosticInfo, fanuc
     ##
     ## handler instance attributes
     ##
@@ -266,6 +268,20 @@ machines:
     - id: parts_unloaded_counter
       address: D4995
       type: long
+
+    l99.driver.fanuc.collectors.ParameterInfo, fanuc:
+    - id: parts_loaded_counter
+      number: 0000
+      type: word
+    l99.driver.fanuc.collectors.DiagnosticInfo, fanuc:
+    - id: parts_loaded_counter
+      number: 0000
+      type: word
+
+#    - id: parts_bad_counter
+ #     number: 0001
+  #    type: word
+   #   axis: 1
 
   #   - id: target_cycle_time
   #    address: D4854
