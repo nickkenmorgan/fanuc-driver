@@ -29,7 +29,7 @@ public class ParameterInfo : Veneer
         if (success)
         {
 
-            dynamic currentValue = nativeInputs[0];
+            dynamic currentValue = nativeInputs[1];
             await OnDataArrivedAsync(nativeInputs, additionalInputs, currentValue);
 
             if (((object)currentValue).IsDifferentString((object)LastChangedValue))

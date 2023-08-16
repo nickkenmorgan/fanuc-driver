@@ -272,7 +272,27 @@ machines:
     l99.driver.fanuc.collectors.ParameterInfo, fanuc:
     - id: parts_loaded_counter
       number: 0000
-      type: word
+      type: byte
+    - id: axis_unit
+      axis: [x]
+      number: 1005
+      type: byte
+    - id: bit_test
+      number: 1201
+      type: bit
+      bit: 1
+    - id: bit2_test
+      number: 1201
+      type: bit
+      bit: 2
+    - id: rapid_feedrate
+      axis: [x, y]
+      number: 1007
+      type: byte      
+    - id: limit
+      axis: [x,y,z]
+      number: 1326
+      type: double
     l99.driver.fanuc.collectors.DiagnosticInfo, fanuc:
     - id: parts_loaded_counter
       number: 0000
